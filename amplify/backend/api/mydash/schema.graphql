@@ -1,0 +1,49 @@
+type Todo @model {
+  id: ID!
+  name: String!
+  description: String
+}
+
+type Admin @model  @auth(rules: [
+  {allow: groups, groups: ["Admin"]},
+  {allow: groups, groups: ["Member"], operations: [read] },
+]) {
+    id: String! # cognito username
+    email: String!
+    lastName: String!
+    firstName: String!
+}
+
+type Member @model @auth(rules: [
+  {allow: groups, groups: ["Admin"]},
+  {allow: owner},
+]) {
+    id: String! # cognito username
+    email: String!
+    lastName: String!
+    firstName: String!
+}
+
+type S3Object {
+    bucket: String!
+    region: String!
+    key: String!
+}
+
+enum InputType {
+    TEXT
+    NUMBER
+    TEXTAREA
+    CHECKBOX
+    RADIO
+    SELECT
+}
+
+type Input {
+    type: InputType!
+    label: String
+    options: [String]
+    defaultValue: String
+    defaultBoolean: String
+    defaultNumber: Int
+}
